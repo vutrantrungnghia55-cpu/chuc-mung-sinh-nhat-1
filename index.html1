@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --pink: #ff85a2; --bg: #fff0f3; }
+        body { margin: 0; background: var(--bg); font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .screen { display: none; flex-direction: column; align-items: center; text-align: center; width: 100%; animation: fadeIn 0.8s; }
+        .active { display: flex; }
+
+        /* Màn hình 1 */
+        .big-cake { font-size: 150px; cursor: pointer; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
+        
+        /* Màn hình 2 */
+        .album { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .album img { width: 140px; height: 140px; border: 5px solid white; border-radius: 10px; transform: rotate(calc(var(--r)*1deg)); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .mid-cake { font-size: 80px; position: relative; cursor: pointer; }
+        .mini-envelope { position: absolute; bottom: -5px; right: -5px; font-size: 30px; animation: bounce 2s infinite; }
+
+        /* Màn hình 3 */
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); max-width: 80%; line-height: 1.8; color: #555; border: 2px dashed var(--pink); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    </style>
+</head>
+<body>
+
+    <audio id="myAudio" src="nhac.mp3" loop></audio>
+
+    <div id="s1" class="screen active">
+        <h1 style="color: var(--pink); font-size: 2.5rem;">Happy Birthday!</h1>
+        <div class="big-cake" onclick="startSurprise()">🎂</div>
+        <p>Bấm vào cái bánh để bắt đầu...</p>
+    </div>
+
+    <div id="s2" class="screen">
+        <div class="album">
+            <img src="c:\Users\Admin\Downloads\image1.jpeg.jpeg" style="--r:-5" alt="Ảnh 1">
+            <img src="c:\Users\Admin\Downloads\image2.jpeg.jpeg" style="--r:5" alt="Ảnh 2">
+            <img src="c:\Users\Admin\Downloads\image3.jpeg.jpeg" style="--r:-3" alt="Ảnh 3">
+            <img src="c:\Users\Admin\Downloads\image4.jpeg.jpeg" style="--r:7" alt="Ảnh 4">
+        </div>
+        <div class="mid-cake" onclick="openCard()">
+            🎂
+            <div class="mini-envelope">✉️</div>
+        </div>
+        <p>Gì thế kia? Một bức thư bí mật!</p>
+    </div>
+
+    <div id="s3" class="screen">
+        <div class="card">
+            <h2 style="color: var(--pink);">Gửi [Tên Người Nhận],</h2>
+            <p>Hôm nay là ngày đặc biệt của bạn! Chúc bạn tuổi mới luôn rạng rỡ như những đóa hoa, thành công rực rỡ và luôn hạnh phúc bên những người thân yêu...</p>
+            <p><strong>- Từ [Tên của Bạn] -</strong></p>
+            <button onclick="location.reload()" style="background:var(--pink); color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer;">Xem lại ❤️</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById("myAudio");
+
+        function startSurprise() {
+            // Chuyển màn hình
+            changeScreen(1, 2);
+            // Phát nhạc (Trình duyệt yêu cầu tương tác mới cho phát nhạc)
+            audio.play();
+        }
+
+        function openCard() {
+            // Pháo hoa nổ khi mở thiệp
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+              confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff85a2', '#ffffff'] });
+              confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff85a2', '#ffffff'] });
+              if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+
+            changeScreen(2, 3);
+        }
+
+        function changeScreen(oldS, newS) {
+            document.getElementById('s' + oldS).classList.remove('active');
+            document.getElementById('s' + newS).classList.add('active');
+        }
+    </script>
